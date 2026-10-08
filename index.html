@@ -86,7 +86,8 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .h3{font-family:var(--display);font-stretch:80%;font-weight:760;font-size:14.5px;text-transform:uppercase;letter-spacing:.045em}
 .lead{color:var(--ink-2);max-width:62ch;margin:6px 0 0}
 .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-.view{display:grid;gap:18px;padding-top:18px;animation:in .28s ease both}
+.view{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;padding-top:18px;animation:in .28s ease both}
+.view>*{min-width:0}
 @keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .between{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -321,6 +322,7 @@ select.sel{border:1px solid var(--line);background:var(--card);border-radius:12p
   .big{font-size:40px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.nope{justify-self:start;align-self:start;background:none;border:0;padding:6px 0;color:var(--ink-3);font:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -348,7 +350,7 @@ const ALLS = ["hiver","mi","ete"];
 const SEASON_LBL = {hiver:"Hiver", mi:"Mi-saison", ete:"Été"};
 const UNIV_LBL = {street:"Street", casual:"Casual chic", smart:"Smart casual", oldmoney:"Old money", corpo:"Corpo", chill:"Chill", sport:"Sport"};
 const FORM_LBL = ["", "Sport", "Décontracté", "Casual", "Habillé", "Formel"];
-const VERDICT_LBL = {pivot:"Pivot", garder:"Garder", surveiller:"À surveiller", vendre:"À vendre", fonctionnel:"Fonctionnel"};
+const VERDICT_LBL = {pivot:"Pivot", garder:"Garder", surveiller:"À surveiller", vendre:"En pause", fonctionnel:"Fonctionnel"};
 const CAT_LBL = {haut:"Hauts", maille:"Mailles", bas:"Bas", veste:"Vestes", costume:"Costumes", chaussures:"Chaussures", accessoire:"Accessoires", parfum:"Parfums", soin:"Soins"};
 const CAT_ONE = {haut:"Haut", maille:"Maille", bas:"Bas", veste:"Veste / manteau", costume:"Costume", chaussures:"Chaussures", accessoire:"Accessoire", parfum:"Parfum", soin:"Soin"};
 const CAT_ORDER = ["haut","maille","bas","veste","costume","chaussures","accessoire","parfum","soin"];
@@ -378,7 +380,7 @@ X("b04","bas","trousers","Pantalon plissé large","Uniqlo C",["#cdb99a"],"beige"
 X("b05","bas","trousers","Pantalon effet barrel","—",["#6b4a33"],"marron",[3,5],"smart oldmoney corpo casual",A,{fit:"large",note:"Coton et polyester, presque barrel sans en être un."});
 X("b06","bas","jeans","Jean large brut","Uniqlo × JW Anderson",["#1e2740"],"brut",[2,4],"street casual smart oldmoney",A,{v:"pivot",fit:"large"});
 X("b07","bas","jeans","Jean large délavé clair","Uniqlo × JW Anderson",["#8fa9c7"],"denim",[1,3],"street casual","mi ete",{fit:"large"});
-X("b08","bas","barrel","Jean barrel délavé","Uniqlo C",["#6f7148"],"olive",[1,3],"street casual","mi",{set:"olive",fit:"barrel"});
+X("b08","bas","barrel","Jean barrel (ensemble)","Uniqlo C",["#5d6150"],"olive",[1,3],"street casual","mi",{set:"olive",fit:"barrel"});
 X("b09","bas","barrel","Jean barrel délavé gris","Bershka",["#3b3c40"],"anthracite",[1,3],"street casual",A,{fit:"barrel"});
 X("b10","bas","barrel","Barrel écru","—",["#e8e0cf"],"ecru",[1,4],"street casual oldmoney","mi ete",{v:"pivot",fit:"barrel"});
 X("b11","bas","trousers","Pantalon velours côtes diagonales","—",["#202022"],"noir",[3,4],"smart casual","mi hiver",{pat:"texture",fit:"droit"});
@@ -393,8 +395,8 @@ X("b19","bas","joggers","Jogging Tech Fleece","Nike",["#8a8d92"],"gris",[1,2],"s
 X("b20","bas","joggers","Jogging ajusté","Under Armour",["#7c7f84"],"gris",[1,1],"sport",A,{v:"fonctionnel",fit:"fusele",note:"Pour la salle."});
 X("b21","bas","trousers","Pantalon rando convertible","Quechua",["#26324a"],"marine",[1,1],"sport",A,{v:"fonctionnel",fit:"droit"});
 X("b22","bas","shorts","Bermuda","Uniqlo",["#4a4c51"],"anthracite",[1,3],"casual street","ete");
-X("b23","bas","shorts","Bermuda","Jack & Jones",["#3d5a80"],"bleu",[1,3],"casual street","ete",{v:"surveiller"});
-X("b24","bas","shorts","Bermuda","Bershka",["#85888d"],"gris",[1,3],"casual street","ete",{v:"vendre",note:"Doublon du bermuda Uniqlo."});
+X("b23","bas","shorts","Bermuda","Jack & Jones",["#3d5a80"],"bleu",[1,3],"casual street","ete",{});
+X("b24","bas","shorts","Bermuda","Bershka",["#85888d"],"gris",[1,3],"casual street","ete",{});
 X("b25","bas","shorts","Short molleton","Uniqlo C",["#1c1c1e"],"noir",[1,2],"chill","ete");
 // Hauts
 X("h01","haut","teels","T-shirt ML AIRism","Uniqlo",["#1b1b1d"],"noir",[1,4],"street casual smart chill",A,{v:"pivot"});
@@ -405,15 +407,15 @@ X("h05","haut","tee","T-shirt près du corps","Uniqlo",["#f4f4f1"],"blanc",[2,3]
 X("h06","haut","henley","T-shirt gaufré col tunisien","Uniqlo",["#1b1b1d"],"noir",[2,4],"casual smart street",A,{v:"pivot",pat:"texture"});
 X("h07","haut","henleyls","Henley gaufré ML","Uniqlo",["#f2f1ec"],"blanc",[2,3],"casual oldmoney","mi hiver",{pat:"texture"});
 X("h08","haut","henleyls","Henley gaufré ML","Uniqlo",["#46484d"],"anthracite",[2,3],"casual street","mi hiver",{pat:"texture"});
-X("h09","haut","teels","T-shirt boxy à écritures","Bershka",["#f2f2ee","#3e7d4f"],"blanc",[1,2],"street","mi",{fa:["vert"],pat:"imprime",v:"surveiller",fit:"boxy"});
+X("h09","haut","teels","T-shirt boxy à écritures","Bershka",["#f2f2ee","#3e7d4f"],"blanc",[1,2],"street","mi",{fa:["vert"],pat:"imprime",fit:"boxy"});
 X("h10","haut","tee","T-shirt imprimé dos","Arte",["#1b1b1d","#e9e1cf"],"noir",[1,2],"street",A,{pat:"imprime"});
 X("h11","haut","tee","T-shirt fleurs au dos","The North Face",["#3f6b4a","#d9a1a6"],"vert",[1,2],"street","ete mi",{fa:["rose"],pat:"imprime"});
 X("h12","haut","tee","T-shirt rayures larges","—",["#e9e2d0","#4a6b8f","#5b7a52","#6d1f2a"],"ecru",[2,3],"casual street","mi ete",{fa:["bleu","vert","bordeaux"],pat:"raye",fit:"oversize"});
-X("h13","haut","tee","T-shirt pizza au dos","Levi’s",["#ece9e2","#c0392b"],"blanc",[1,2],"street","ete",{pat:"imprime",v:"surveiller",fit:"oversize",note:"Couleur à confirmer."});
+X("h13","haut","tee","T-shirt pizza au dos","Levi’s",["#45474c","#d9a441"],"anthracite",[1,2],"street","ete mi",{pat:"imprime",fit:"oversize"});
 X("h14","haut","tee","T-shirt logo au col","Nike",["#66683f"],"olive",[1,2],"street",A,{pat:"logo",fit:"oversize"});
-X("h15","haut","tee","T-shirt Rio Ipanema Soul","Bershka",["#f4f4f1","#d98a3b"],"blanc",[1,2],"street","ete",{pat:"imprime",v:"surveiller",fit:"oversize"});
+X("h15","haut","tee","T-shirt Rio Ipanema Soul","Bershka",["#f4f4f1","#8fb8e0","#1f3a6b"],"blanc",[1,2],"street","ete",{fa:["bleu-clair","marine"],pat:"imprime",fit:"oversize"});
 X("h16","haut","polo","Polo rayé","Uniqlo × JW Anderson",["#2f6a4c","#f3f1ea"],"vert",[2,4],"casual oldmoney","mi ete",{fa:["blanc"],pat:"raye"});
-X("h17","haut","polo","Polo","Celio",["#d9a1a6"],"rose",[2,4],"casual","ete",{v:"surveiller"});
+X("h17","haut","polo","Polo","Celio",["#d9a1a6"],"rose",[2,4],"casual","ete",{});
 X("h18","haut","polo","Polo à rayures","Dolce & Gabbana",["#6b4a33","#cdb99a","#f3f1ea"],"marron",[2,4],"casual smart oldmoney","mi ete",{fa:["beige","blanc"],pat:"raye",v:"pivot"});
 X("h19","haut","polo","Polo","Zara",["#1b1b1d"],"noir",[2,4],"smart casual",A);
 X("h20","haut","polo","Polo maille col skipper","—",["#4a2633"],"aubergine",[3,4],"smart oldmoney casual","mi ete",{pat:"texture",v:"pivot",note:"Aubergine qui tire vers le bordeaux. Superbe sur peau mate."});
@@ -427,48 +429,48 @@ X("h27","haut","shirt","Chemise","Uniqlo",["#f5f6f8"],"blanc",[3,5],"corpo smart
 X("h28","haut","shirt","Chemise légère stretch","Zara",["#b8d0ea"],"bleu-clair",[3,5],"corpo smart","ete mi");
 X("h29","haut","shirt","Chemise large rayée","Uniqlo × JW Anderson",["#f3f4f6","#5b7fb0"],"blanc",[2,4],"casual smart street",A,{fa:["bleu"],pat:"raye",fit:"oversize"});
 X("h30","haut","jersey","Maillots de foot","Algérie, PSG, Roma…",["#1f6b3a","#f4f4f1","#b0262f"],"multi",[1,2],"street","ete mi",{pat:"raye",note:"Une ligne pour toute la collection. Les couleurs varient selon le maillot."});
-X("h31","haut","tank","Maillot de basket Bucks","NBA",["#2f5d9a"],"bleu",[1,1],"street","ete",{v:"surveiller"});
+X("h31","haut","tank","Maillot de basket Bucks","NBA",["#2f5d9a"],"bleu",[1,1],"street","ete",{});
 X("h32","haut","tank","Débardeurs ×2","Jules",["#1b1b1d"],"noir",[1,1],"sport","ete",{v:"fonctionnel",note:"Un noir, un blanc."});
-X("h33","haut","tank","T-shirts sans manches ×2","Bershka",["#f4f4f1"],"blanc",[1,1],"sport","ete",{v:"vendre",note:"Même usage que les débardeurs."});
+X("h33","haut","tank","T-shirts sans manches ×2","Bershka",["#f4f4f1"],"blanc",[1,1],"sport","ete",{v:"fonctionnel"});
 // Mailles
 X("m01","maille","sweater","Pull cœur","Ami Paris",["#1b1b1d","#b0262f"],"noir",[2,3],"casual street","mi hiver",{pat:"logo",fa:["rouge"]});
 X("m02","maille","sweater","Pull milano","Uniqlo",["#a8cdb6"],"menthe",[2,4],"casual smart","mi");
-X("m03","maille","cardigan","Cardigan milano à col","—",["#1b1b1d"],"noir",[3,4],"smart casual","mi",{v:"pivot"});
-X("m04","maille","cardigan","Cardigan milano à col","—",["#24382c"],"vert",[3,4],"smart oldmoney","mi");
-X("m05","maille","cardigan","Cardigan zippé milano","—",["#5a2236"],"bordeaux",[2,4],"casual smart","mi");
+X("m03","maille","cardigan","Cardigan milano col chemise","Uniqlo",["#1b1b1d"],"noir",[3,4],"smart casual","mi",{v:"pivot",art:"shirtcard"});
+X("m04","maille","cardigan","Cardigan milano col chemise","Uniqlo",["#24382c"],"vert",[3,4],"smart oldmoney casual","mi",{art:"shirtcard"});
+X("m05","maille","cardigan","Cardigan zippé milano","Uniqlo",["#3d2333","#f2f0ea"],"aubergine",[2,4],"casual smart street","mi",{fa:["bordeaux"],art:"trackzip"});
 X("m06","maille","cardigan","Cardigan","Uniqlo",["#c4c6ca"],"gris-clair",[2,4],"casual smart oldmoney","mi");
-X("m07","maille","cardigan","Cardigan","Jules",["#26324f"],"marine",[2,3],"casual","mi",{v:"vendre",note:"Doublon moins qualitatif des cardigans milano."});
-X("m08","maille","cardigan","Gilet zippé gros col","Zara",["#8b8b88"],"gris",[2,3],"casual street","mi hiver",{note:"Couleur à confirmer."});
-X("m09","maille","zip","Pull col zippé tricot","Uniqlo",["#cbb593"],"beige",[3,4],"smart oldmoney casual","mi hiver",{pat:"texture",v:"pivot"});
+X("m07","maille","cardigan","Cardigan","Jules",["#26324f"],"marine",[2,3],"casual","mi",{});
+X("m08","maille","cardigan","Gilet zippé gros col épais","Zara",["#8b8b88"],"gris",[2,3],"casual street","mi hiver",{th:3,note:"Épais : il se porte seul ou sous un manteau, jamais sous un blouson ajusté."});
+X("m09","maille","zip","Pull col zippé tricot","Uniqlo",["#cbb593"],"beige",[3,4],"smart oldmoney casual","mi hiver",{pat:"texture",v:"pivot",th:3});
 X("m10","maille","zip","Pull col zippé","Zara",["#1b1b1d"],"noir",[3,4],"smart casual","mi hiver");
-X("m11","maille","zip","Pull col zippé fin","Celio",["#3e5f8a"],"bleu",[3,4],"smart","mi",{v:"vendre"});
-X("m12","maille","sweater","Pull chaud col montant","Uniqlo",["#d4c3a3"],"beige",[2,4],"casual oldmoney","hiver");
+X("m11","maille","zip","Pull col zippé fin","Celio",["#3e5f8a"],"bleu",[3,4],"smart","mi",{th:1});
+X("m12","maille","sweater","Pull chaud col montant","Uniqlo",["#d4c3a3"],"beige",[2,4],"casual oldmoney","hiver",{th:3});
 X("m13","maille","vest","Pull sans manches large","—",["#1b1b1d"],"noir",[3,4],"smart","mi",{note:"Se porte sur une chemise."});
-X("m14","maille","sweater","Gros pull chiné","Uniqlo",["#6f7f91"],"gris",[2,3],"casual street","hiver",{pat:"texture",fit:"oversize"});
-X("m15","maille","sweater","Gros pull texturé","H&M",["#ece4d3"],"ecru",[2,3],"casual oldmoney","hiver",{pat:"texture"});
-X("m16","maille","sweater","Pull fin à points","H&M",["#1b1b1d"],"noir",[3,4],"smart","mi",{pat:"texture",v:"surveiller",fit:"ajuste",note:"À vendre s’il est bouloché."});
+X("m14","maille","sweater","Gros pull chiné","Uniqlo",["#6f7f91"],"gris",[2,3],"casual street","hiver",{pat:"texture",fit:"oversize",th:3});
+X("m15","maille","sweater","Gros pull texturé","H&M",["#ece4d3"],"ecru",[2,3],"casual oldmoney","hiver",{pat:"texture",th:3});
+X("m16","maille","sweater","Pull fin à points","H&M",["#1b1b1d"],"noir",[3,4],"smart","mi",{pat:"texture",fit:"ajuste",th:1});
 X("m17","maille","hoodie","Hoodie","Uniqlo C",["#4a4c51"],"anthracite",[1,2],"street chill","mi hiver",{set:"grisfonce"});
 X("m18","maille","turtleneck","Col roulé fin","—",["#1b1b1d"],"noir",[3,5],"smart oldmoney corpo casual","mi hiver",{v:"pivot",base:1});
 X("m19","maille","turtleneck","Col roulé fin","—",["#f4f4f1"],"blanc",[3,5],"smart oldmoney casual","mi hiver",{base:1});
 X("m20","maille","turtleneck","Col roulé fin","—",["#c4c6ca"],"gris-clair",[3,5],"smart oldmoney corpo","mi hiver",{base:1});
 // Vestes
 X("v01","veste","leather","Blouson cuir de ton père","—",["#18181a"],"noir",[2,4],"street casual smart","mi",{v:"pivot",note:"Raccourcir les manches chez un retoucheur cuir."});
-X("v02","veste","leather","Veste boxy similicuir","ASOS",["#5e3d28"],"marron",[2,3],"street","mi",{v:"vendre"});
+X("v02","veste","leather","Veste boxy similicuir oversize","ASOS",["#5e3d28"],"marron",[2,3],"street casual","mi",{fit:"oversize",cap:3,art:"boxyleather"});
 X("v03","veste","jacket","Veste boxy col texturé","Uniqlo",["#e7dfcd"],"ecru",[2,4],"casual smart","mi");
 X("v04","veste","bomber","Bomber à col","Zara",["#18181a"],"noir",[2,4],"street casual smart","mi",{v:"pivot"});
 X("v05","veste","jacket","Harrington laine mélangée","Uniqlo",["#405c45"],"vert",[2,4],"casual smart corpo oldmoney","mi",{v:"pivot"});
 X("v06","veste","gilet","Veste sans manches","Zara",["#d6c9ae"],"beige",[2,3],"casual","mi");
-X("v07","veste","jacket","Coupe-vent imperméable","Uniqlo",["#5b2f2a"],"marron",[2,3],"casual street","mi",{fa:["bordeaux"],rain:1});
-X("v08","veste","jacket","Veste en jean","Uniqlo C",["#6f7148"],"olive",[1,3],"street casual","mi",{set:"olive"});
+X("v07","veste","jacket","Coupe-vent imperméable à capuche","Uniqlo",["#5b2f2a"],"marron",[2,3],"casual street","mi",{fa:["bordeaux"],rain:1,art:"anorak",cap:3});
+X("v08","veste","jacket","Veste en jean (ensemble)","Uniqlo C",["#5d6150"],"olive",[1,3],"street casual","mi",{set:"olive",art:"trucker",cap:3});
 X("v09","veste","tracktop","Veste de survêt vintage","Nike",["#9cc0e0","#dce9f5"],"bleu-clair",[1,2],"street","mi");
 X("v10","veste","tracktop","Veste de jogging","—",["#b9bcc1"],"gris-clair",[1,2],"chill","mi",{set:"grisclair"});
 X("v11","veste","tracktop","Veste de jogging","Jordan",["#1b1b1d"],"noir",[1,2],"street","mi");
 X("v12","veste","tracktop","Veste Tech Fleece","Nike",["#8a8d92"],"gris",[1,2],"street sport","mi",{set:"tech"});
 X("v13","veste","puffer","Doudoune réversible","Nike",["#18181a","#f4f4f1"],"noir",[1,3],"street","hiver",{fit:"oversize"});
-X("v14","veste","puffer","Doudoune sans capuche","Zara",["#1f2a44"],"marine",[2,3],"casual","hiver",{v:"vendre"});
+X("v14","veste","puffer","Doudoune sans capuche","Zara",["#1f2a44"],"marine",[2,3],"casual","hiver",{});
 X("v15","veste","puffer","Doudoune longue","Zara",["#18181a"],"noir",[2,4],"casual smart street","hiver",{len:"long"});
 X("v16","veste","trench","Trench ceinturé","Mango",["#d6c6a6"],"beige",[3,5],"smart oldmoney corpo casual","mi",{v:"pivot",rain:1});
-X("v17","veste","coat","Pardessus","Boss",["#59603e"],"olive",[3,5],"smart oldmoney corpo","hiver mi",{v:"pivot"});
+X("v17","veste","coat","Pardessus","Boss",["#28352b"],"vert",[3,5],"smart oldmoney corpo","hiver mi",{v:"pivot"});
 X("v18","veste","coat","Pardessus","—",["#1b1b1d"],"noir",[3,5],"smart corpo oldmoney","hiver mi",{v:"pivot"});
 X("v19","veste","coat","Pardessus","—",["#45474c"],"anthracite",[3,5],"smart corpo oldmoney","hiver mi");
 // Costumes
@@ -477,15 +479,16 @@ X("c02","costume","suit","Costume","Celio",["#18181a"],"noir",[5,5],"corpo",A,{n
 X("c03","costume","suit","Costume motif léger","Mango",["#1f2b45"],"marine",[4,5],"corpo smart",A,{pat:"texture",v:"pivot"});
 X("c04","costume","suit","Costume croisé rayé","Mango premium",["#1a2238","#5d6b8c"],"marine",[4,5],"corpo",A,{pat:"raye",note:"Sur une carrure large, le croisé élargit encore le buste. Garde-le pour les grandes occasions."});
 // Chaussures
-X("s01","chaussures","sneaker","Neo Shot full black","Lacoste",["#1b1b1d"],"noir",[1,3],"street casual",A);
-X("s02","chaussures","runner","1906R","New Balance",["#b7bac0","#2a2b2e","#e8e9ec"],"gris",[1,3],"street casual",A,{v:"pivot",fa:["noir"]});
-X("s03","chaussures","runner","P-6000","Nike",["#8b8a66","#d8cdb4","#f1f0ea"],"olive",[1,3],"street casual",A,{fa:["beige"]});
-X("s04","chaussures","runner","Gel-NYC","Asics",["#f0ece3","#7b2532","#d6c7a9"],"ecru",[1,3],"street casual",A,{v:"pivot",fa:["bordeaux"]});
+X("s01","chaussures","runner","Neo Shot full black","Lacoste",["#1b1b1d"],"noir",[1,3],"street casual",A,{kit:{up:"#1d1d1f",mesh:"#2a2b2e",ov:"#303136",heel:"#232326",mud:"#1f1f22",logo:"#5b6b82",mark:"lines",sole:"#1b1b1d",out:"#101012",lace:"#2a2a2c",lug:1}});
+X("s02","chaussures","runner","1906R","New Balance",["#f2f2ef","#b9bcc2","#1d1d1f"],"gris-clair",[1,3],"street casual",A,{v:"pivot",fa:["noir","blanc"],kit:{up:"#f3f3f0",mesh:"#e6e6e3",ov:"#b9bcc2",heel:"#1d1d1f",mud:"#c4c7cc",logo:"#1d1d1f",mark:"n",sole:"#f4f3ee",solex:"#b9bcc2",out:"#1d1d1f",lace:"#f4f3ee"}});
+X("s03","chaussures","runner","P-6000","Nike",["#d8cfbc","#8a8e6c","#4f7464"],"beige",[1,3],"street casual",A,{fa:["olive"],kit:{up:"#d8cfbc",mesh:"#8a8e6c",ov:"#b9bcc2",heel:"#cfc4ae",mud:"#cdc3ad",logo:"#4f7464",mark:"swoosh",sole:"#f1efe8",solex:"#4f7464",out:"#3a3c3b",lace:"#f4f4f1"}});
+X("s04","chaussures","runner","Gel-NYC","Asics",["#f0ece3","#7b2532"],"ecru",[1,3],"street casual",A,{v:"pivot",fa:["bordeaux"],kit:{up:"#f1ede4",mesh:"#e9e4d8",ov:"#e2dbcc",heel:"#7b2532",mud:"#7b2532",logo:"#d9d1c0",mark:"asics",mudBig:1,sole:"#efe9dc",out:"#2b2b2e",lace:"#efe9dc"}});
+X("s15","chaussures","sneaker","Air Force 1","Nike",["#f6f6f3"],"blanc",[1,3],"street casual chill",A,{kit:{style:"court",up:"#f7f7f4",heel:"#efefea",logo:"#e6e6e0",sole:"#f7f7f4",out:"#e2e2dc",lace:"#f7f7f4"}});
 X("s05","chaussures","derby","Derbies","Zara",["#18181a"],"noir",[3,5],"corpo smart",A);
 X("s06","chaussures","derby","Chaussures de ville","San Marina",["#5a3a22"],"marron",[3,5],"corpo smart oldmoney",A);
 X("s07","chaussures","loafer","Mocassins","Mango",["#18181a"],"noir",[3,5],"smart oldmoney corpo casual",A,{v:"pivot"});
 X("s08","chaussures","boat","Chaussures bateau cuir","—",["#6e4a2e"],"marron",[2,4],"oldmoney casual","mi ete");
-X("s09","chaussures","boot","Chelsea","H&M",["#18181a"],"noir",[2,4],"smart casual","mi hiver",{v:"surveiller"});
+X("s09","chaussures","boot","Chelsea","H&M",["#18181a"],"noir",[2,4],"smart casual","mi hiver",{});
 X("s10","chaussures","slide","Claquettes similicuir","Zara",["#18181a"],"noir",[1,2],"chill","ete");
 X("s11","chaussures","slide","Claquettes","Adidas",["#18181a","#f4f4f1"],"noir",[1,1],"sport chill","ete",{v:"fonctionnel"});
 X("s12","chaussures","sneaker","Baskets de sport","Adidas",["#f4f4f1"],"blanc",[1,1],"sport",A,{v:"fonctionnel"});
@@ -496,7 +499,7 @@ X("a01","accessoire","tie","Cravate","—",["#6a1f2b"],"bordeaux",[4,5],"corpo s
 X("a02","accessoire","tie","Cravate","—",["#18181a"],"noir",[5,5],"corpo",A,{v:"fonctionnel",note:"Cérémonies."});
 X("a03","accessoire","knittie","Cravate tricot","—",["#59603e"],"olive",[3,5],"smart oldmoney corpo",A,{v:"pivot",pat:"texture"});
 X("a04","accessoire","knittie","Cravate tricot","—",["#a9c4e2"],"bleu-clair",[3,5],"smart oldmoney corpo",A,{pat:"texture"});
-X("a05","accessoire","tie","Cravate","—",["#18181a","#a32630"],"noir",[4,5],"corpo",A,{fa:["rouge"],pat:"raye",v:"surveiller"});
+X("a05","accessoire","tie","Cravate","—",["#18181a","#a32630"],"noir",[4,5],"corpo",A,{fa:["rouge"],pat:"raye"});
 X("a06","accessoire","tie","Cravate à petits motifs","—",["#1f2a44","#f3f3f3"],"marine",[4,5],"corpo smart",A,{pat:"texture"});
 X("a07","accessoire","tieclip","Pince à cravate","—",["#c9a24a"],"camel",[4,5],"corpo",A,{note:"Dorée, alors que tes bijoux sont en argent."});
 X("a08","accessoire","watch","Chronographe MTBETA","Maison du Temps",["#c3c6cb","#1f2b4a"],"gris-clair",[2,5],"smart corpo oldmoney casual street",A,{v:"pivot"});
@@ -506,7 +509,7 @@ X("a11","accessoire","sunglasses","Solaires","Cartier",["#18181a","#3b2a4a"],"no
 X("a12","accessoire","sunglasses","Solaires teintées transparentes","—",["#d8d4cc","#8a7f72"],"ecru",[1,3],"casual street","ete mi");
 X("a13","accessoire","sunglasses","Solaires dégradé rose","—",["#c9a24a","#d9a1a6"],"rose",[1,3],"street","ete");
 X("a14","accessoire","sunglasses","Solaires basiques","—",["#2a2a2c","#3a3a3d"],"noir",[1,3],"chill casual","ete",{v:"fonctionnel"});
-X("a15","accessoire","glasses","Lunettes de vue rectangle","Lacoste",["#2a2a2c","#cfd6de"],"noir",[2,5],"casual",A,{v:"surveiller"});
+X("a15","accessoire","glasses","Lunettes de vue rectangle","Lacoste",["#2a2a2c","#cfd6de"],"noir",[2,5],"casual",A,{});
 X("a16","accessoire","glasses","Lunettes de vue","Versace",["#9aa0a8","#cfd6de"],"gris",[2,5],"smart casual",A);
 X("a17","accessoire","beanie","Bonnet fin","Kiprun",["#2a2a2c"],"noir",[1,3],"street casual chill sport","hiver mi",{note:"Couleur à confirmer."});
 X("a18","accessoire","cap","Casquette","Nike",["#18181a"],"noir",[1,2],"street chill",A);
@@ -629,7 +632,11 @@ const TOPV = {tee:"regular",teels:"regular",tank:"ajuste",polo:"regular",polols:
 const LEN = {bomber:"court",leather:"court",jacket:"court",tracktop:"court",gilet:"court",puffer:"hanche",coat:"mi",trench:"long",suit:"hanche"};
 const BOTV = {joggers:"large",cargo:"large",trousers:"droit",jeans:"droit",barrel:"barrel",shorts:"short"};
 const SHOEW = {runner:"presence",sneaker:"presence",boot:"presence",derby:"classique",loafer:"classique",boat:"classique",slide:"fin"};
+const THK = {turtleneck:1, sweater:2, cardigan:2, zip:2, hoodie:2, vest:2, overshirt:2};
+const CAP = {tracktop:1, leather:2, bomber:2, jacket:2, gilet:3, puffer:3, coat:3, trench:3, suit:2};
 function derive(i){
+  if (i.cat === "maille") i.th = i.th || THK[i.t] || 2;
+  if (i.cat === "veste") i.cap = i.cap || CAP[i.t] || 2;
   if (i.cat === "haut" || i.cat === "maille") i.vol = i.fit === "large" ? "oversize" : (["oversize","boxy","ajuste"].includes(i.fit) ? i.fit : (TOPV[i.t] || "regular"));
   if (i.cat === "veste") i.len = i.len || LEN[i.t] || "court";
   if (i.cat === "bas") i.vol = i.fit || BOTV[i.t] || "droit";
@@ -766,7 +773,7 @@ function lsGet(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){
 function lsSet(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 function normU(d){
   d = d || {};
-  return {sold:d.sold||{}, days:d.days||{}, looks:Array.isArray(d.looks)?d.looks:[], custom:Array.isArray(d.custom)?d.custom:[], bought:d.bought||{}, edits:d.edits||{}, photos:d.photos||{}, week:d.week||null, backup:d.backup||null};
+  return {sold:d.sold||{}, days:d.days||{}, looks:Array.isArray(d.looks)?d.looks:[], custom:Array.isArray(d.custom)?d.custom:[], bought:d.bought||{}, edits:d.edits||{}, photos:d.photos||{}, week:d.week||null, backup:d.backup||null, nope:d.nope||{}, yes:d.yes||{}, vset:d.vset||{}};
 }
 let U = normU(null);
 const ymd = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
@@ -779,6 +786,7 @@ function owned(){
   for (const it of INV) list.push(U.edits[it.id] ? derive(Object.assign({}, it, U.edits[it.id])) : it);
   for (const w of WISH) if (U.bought[w.id]) list.push(derive(Object.assign({}, w, {wish:false, isNew:true}, U.edits[w.id] || {})));
   for (const c of U.custom) list.push(derive(Object.assign({pat:"uni",fa:[],v:"garder",u:[],s:ALLS.slice(),f:[2,4]}, c, {custom:true})));
+  if (U.vset) for (let k = 0; k < list.length; k++){ const v = U.vset[list[k].id]; if (v && v !== list[k].v) list[k] = Object.assign({}, list[k], {v}); }
   OWNED = list; return list;
 }
 const byId = id => owned().find(i => i.id === id) || WISH.find(i => i.id === id);
@@ -859,6 +867,32 @@ function poolFor(slot, cfg, used){
   }
   return items;
 }
+const ipk = (a,b) => [a,b].sort().join("~");
+function taste(a, b){ const k = ipk(a.id, b.id); return -.14*Math.min(U.nope[k]||0, 3) + .03*Math.min(U.yes[k]||0, 3); }
+function recordPairs(map, ids, focus){
+  const cl = ids.filter(id => { const x = byId(id); return x && CLOTHES.includes(x.cat); });
+  for (let i = 0; i < cl.length; i++) for (let j = i+1; j < cl.length; j++){
+    if (focus && focus.size && !focus.has(cl[i]) && !focus.has(cl[j])) continue;
+    const k = ipk(cl[i], cl[j]); map[k] = Math.min((map[k]||0) + 1, 5);
+  }
+}
+const SHORTSL = new Set(["tee","polo","shirtss","tank","jersey","henley"]);
+const SLEEVELESS = new Set(["gilet","vest"]);
+function sleeveRule(pool, slot, pieces, slots){
+  const base = pieces.base && byId(pieces.base); const short = base && SHORTSL.has(base.t);
+  const outer = pieces.outer && byId(pieces.outer);
+  let r = pool;
+  if (slot === "outer"){
+    if (short && !slots.includes("mid")) r = r.filter(i => i.t !== "gilet");
+    const m = pieces.mid && byId(pieces.mid); if (m) r = r.filter(i => (i.cap || 2) >= (m.th || 2));
+  }
+  if (slot === "mid"){
+    if (short || (outer && outer.t === "gilet")) { const f = r.filter(i => i.t !== "vest"); if (f.length) r = f; }
+    if (outer) r = r.filter(i => (i.th || 2) <= (outer.cap || 2));
+  }
+  if (slot === "base" && pieces.mid && byId(pieces.mid) && byId(pieces.mid).t === "vest") r = r.filter(i => !SHORTSL.has(i.t));
+  return r;
+}
 function candScore(c, chosen, cfg){
   const V = VIBES[cfg.vibe];
   let s = chosen.length ? chosen.reduce((a,o) => a + pairScore(c,o).s, 0) / chosen.length / 100 : .75;
@@ -869,6 +903,7 @@ function candScore(c, chosen, cfg){
   if (famCount([...chosen, c]) > 4) s -= .05;
   const ds = daysSince(c.id); if (ds !== null){ if (ds <= 2) s -= .07; else if (ds <= 5) s -= .03; }
   if (cfg.rain && c.rain) s += .06;
+  for (const o of chosen) s += taste(c, o);
   return s + (rng()-.5)*.05;
 }
 function pickFrom(list, chosen, cfg, exclude){
@@ -908,7 +943,7 @@ function buildOutfit(cfg, prev){
   for (const k of slots) if (locked[k]){ const it = byId(locked[k]); pieces[k] = it.id; chosen.push(it); used.add(it.id); }
   const order = ["suit","bottom","base","outer","mid","shoes"].filter(k => slots.includes(k) && !pieces[k]);
   for (const k of order){
-    const pool = restrictSuit(poolFor(k, cfg, used), k, pieces);
+    const pool = sleeveRule(restrictSuit(poolFor(k, cfg, used), k, pieces), k, pieces, slots);
     const ex = prev && prev.avoid && prev.avoid[k] ? new Set(prev.avoid[k]) : null;
     const c = pickFrom(pool, chosen, cfg, ex) || pickFrom(pool, chosen, cfg, null);
     if (c){ pieces[k] = c.id; chosen.push(c); used.add(c.id); }
@@ -919,7 +954,7 @@ function buildOutfit(cfg, prev){
 function rerollSlot(out, slot){
   const cfg = out.cfg; const chosen = []; const used = new Set();
   for (const k in out.pieces) if (k !== slot){ const it = byId(out.pieces[k]); if (it){ chosen.push(it); used.add(it.id); } }
-  const pool = restrictSuit(poolFor(slot, cfg, used), slot, out.pieces);
+  const pool = sleeveRule(restrictSuit(poolFor(slot, cfg, used), slot, out.pieces), slot, out.pieces, Object.keys(out.pieces));
   out.tried = out.tried || {};
   const tried = new Set(out.tried[slot] || []); if (out.pieces[slot]) tried.add(out.pieces[slot]);
   let c = pickFrom(pool, chosen, cfg, tried);
@@ -972,7 +1007,13 @@ function harmony(list, out){
     const r = pairScore(list[i], list[j]); sum += r.s; n++; if (r.s < lo) lo = r.s;
     for (const t of r.tags){ if (t.g){ const prev = tagMap.get(t.x) || 0; tagMap.set(t.x, Math.max(prev, r.s)); } else warn.set(t.x, (warn.get(t.x)||0)+1); }
   }
-  let h = .55*(sum/n) + .45*lo - 4; const acc = accents(list); if (acc > 2) h -= 5*(acc-2);
+  let h = .55*(sum/n) + .45*lo - 4; let nopeHit = false;
+  for (let i = 0; i < list.length; i++) for (let j = i+1; j < list.length; j++){ const k = ipk(list[i].id, list[j].id); if (U.nope[k]){ h -= 6*Math.min(U.nope[k],3); nopeHit = true; } else if (U.yes[k]) h += .5; }
+  const armsBare = list.some(x => SLEEVELESS.has(x.t)) && !list.some(x => (x.cat === "haut" || x.cat === "maille" || x.cat === "veste" || x.cat === "costume") && !SLEEVELESS.has(x.t) && !SHORTSL.has(x.t));
+  if (armsBare) h -= 12;
+  const ov = list.find(x => x.cat === "veste"); const tooThick = ov && list.some(x => x.cat === "maille" && !x.base && (x.th || 2) > (ov.cap || 2));
+  if (tooThick) h -= 14;
+  const acc = accents(list); if (acc > 2) h -= 5*(acc-2);
   const fc = famCount(list); if (fc > 4) h -= 3;
   const sil = out ? silOf(out) : {key:"droit", bonus:0, tags:[]};
   h += sil.bonus;
@@ -984,6 +1025,9 @@ function harmony(list, out){
   const w = [...warn.keys()].slice(0,2);
   if (acc > 2) w.push(acc+" couleurs vives, c’est beaucoup");
   if (fc > 4) w.push("Plus de 4 couleurs, vise 3 maximum");
+  if (tooThick) w.unshift("La maille est plus épaisse que la veste, ça ne passe pas dessous");
+  if (armsBare) w.unshift("Sans manches sur des bras nus, ajoute des manches longues");
+  if (nopeHit) w.unshift("Tu as déjà dit que ce duo n’était pas ton style");
   return {h: Math.round(Math.max(0, Math.min(100, h))), good, warn: w, sil: sil.key};
 }
 const H_LBL = h => h >= 88 ? "Impeccable" : h >= 78 ? "Très solide" : h >= 66 ? "Ça passe" : "Risqué";
@@ -1142,6 +1186,11 @@ const SH = {
   hoodie:{b:B.hoodie,o:"M26 9 Q32 14 38 9 M24 40 L40 40 L38 48 L26 48 Z M30 14 L29 22 M34 14 L35 22"},
   vest:{b:B.vest,o:"M19 52 L45 52"}, gilet:{b:B.gilet,o:"M32 12 L32 57 M21 42 L28 42 M36 42 L43 42"},
   jacket:{b:B.jacket,o:"M28 6 L30 16 L32 12 L34 16 L36 6 M32 12 L32 58 M21 44 L28 44 M36 44 L43 44"},
+  shirtcard:{b:B.sweater,o:"M27 7 L28 14.5 L32 11 L36 14.5 L37 7 M32 11 L32 54 M33.6 17 L33.7 17 M33.6 24 L33.7 24 M33.6 31 L33.7 31 M33.6 38 L33.7 38 M33.6 45 L33.7 45 M36.5 22 L42.5 22 L42.5 29 L36.5 29 Z"},
+  trackzip:{b:B.sweater,o:"M19 51 L45 51 M8 47 L13 48 M56 47 L51 48",x:'<path d="M25.5 3 L38.5 3 L39 9.5 Q32 12.5 25 9.5 Z" fill="F1" stroke="F2" stroke-width="1.3" stroke-linejoin="round"/><path d="M32 3.6 L32 54" stroke="F2" stroke-width="1.7"/>'},
+  trucker:{b:B.jacket,o:"M27 6.5 L28 15 L32 11 L36 15 L37 6.5 M32 11 L32 58 M18 21 Q32 23.5 46 21 M35.5 25 L42.5 25 L42.5 33 L35.5 33 Z M33.7 27 L33.8 27 M33.7 37 L33.8 37 M33.7 47 L33.8 47 M18 53.5 L46 53.5"},
+  boxyleather:{b:B.puffer,o:"M27 5 L22 15 L29 21 M37 5 L42 15 L35 21 M29 21 L35 56 M19 34 L26 34 M38 36 L45 36 M17 51 L47 51"},
+  anorak:{b:'<path d="M22 12 Q20 1 32 1 Q44 1 42 12 L36 7 L32 12 L28 7 Z"/>'+B.jacket,o:"M24 10 Q25 4 32 4 Q39 4 40 10 M32 12 L32 58 M29 13 L28.6 20 M35 13 L35.4 20 M21 44 L28 44 M36 44 L43 44 M18 52 L46 52"},
   bomber:{b:B.bomber,o:"M28 6 Q32 11 36 6 M32 9 L32 55 M18 51 L46 51 M8 49 L14 50 M56 49 L50 50"},
   leather:{b:B.jacket,o:"M28 6 L24 14 L30 20 M36 6 L40 14 L34 20 M30 20 L36 58 M20 30 L26 30 M38 32 L44 32"},
   tracktop:{b:B.jacket,o:"M28 6 Q32 10 36 6 M32 9 L32 58 M14.5 18 L9.5 50 M16.5 18 L11.5 51 M49.5 18 L54.5 50 M47.5 18 L52.5 51"},
@@ -1182,8 +1231,44 @@ const SH = {
 };
 let artSeq = 0;
 function lum(hex){ const h = String(hex||"#888888").replace("#",""); const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16); return (.2126*r + .7152*g + .0722*b)/255; }
+function kitShoe(k){
+  const S = 'stroke="currentColor" stroke-opacity=".3" stroke-width=".9" stroke-linejoin="round"';
+  const P = (d, f) => '<path d="'+d+'" fill="'+f+'" '+S+'/>';
+  const L = (d, c, w) => '<path d="'+d+'" fill="none" stroke="'+c+'" stroke-width="'+(w||1.6)+'" stroke-linecap="round" stroke-linejoin="round"/>';
+  let g = "";
+  if (k.style === "court"){
+    g += P("M6 43 Q5.5 33 10 31 Q15 32.5 21 32 L24 30 Q28 30 31 33.5 Q44 37 54 39 Q60 40.5 60 44 L6 44 Z", k.up);
+    g += P("M6 43.5 Q5.5 33 10 31 Q11.5 31.6 13 32 Q11.5 37.5 13.5 44 L6 44 Z", k.heel);
+    g += P("M15 42.5 Q30 40.5 49 35.5 Q38 41.8 18.5 44 Z", k.logo);
+    g += L("M47 39.6 L47.1 39.6 M50 40.3 L50.1 40.3 M53 41 L53.1 41 M49 38.2 L49.1 38.2 M52 38.9 L52.1 38.9", "rgba(0,0,0,.28)", 1.1);
+    g += P("M4.5 43.5 L60.5 43.5 L60.5 49.5 L4.5 49.5 Z", k.sole);
+    g += L("M6 45.9 L59 45.9", "rgba(0,0,0,.2)", .7);
+    g += P("M4.5 49.5 L60.5 49.5 L60.5 51.2 L4.5 51.2 Z", k.out);
+    g += L("M24.5 31 L27 34.6 M28 32 L30.5 35.6 M31.5 33.3 L34 36.6", "rgba(0,0,0,.25)", 1.3);
+    g += L("M10 31 Q15 32.5 21 32", "rgba(0,0,0,.3)", .9);
+    return '<g transform="translate(0,-3)">'+g+"</g>";
+  }
+  g += P("M6 42 Q4.5 31 9 28.5 Q14 30.5 20 30 L23 27.5 Q27 27 30 31 Q42 35 52 37.4 Q59.5 39 60.3 43.5 L6 43.5 Z", k.up);
+  g += P("M42 34.5 Q53 37.3 60.3 43.5 L45 43.5 Q42 39.5 42 34.5 Z", k.mesh);
+  g += P("M16 42.5 Q17.5 35 25 29.8 L28.6 30 Q21 36 22 42.5 Z", k.ov);
+  g += P("M29 42.5 Q31 36.5 37 32.9 L40.6 33.9 Q35 37.5 35 42.5 Z", k.ov);
+  g += P("M6 42.5 Q4.5 31 9 28.5 Q11.5 29.6 13.6 30 Q11 36 14 42.5 Z", k.heel);
+  g += P(k.mudBig ? "M5.3 44 L5.3 36.8 Q11 36.2 15 38.6 Q22 36.6 30 38.8 Q40 37.6 48 39.2 Q56 39.6 60.2 41.4 L60.4 44 Z" : "M5.3 44 L5.3 40.6 Q20 39.4 35 40.2 Q50 40.7 60.2 42.4 L60.4 44 Z", k.mud);
+  if (k.mark === "swoosh") g += L("M18 39.8 Q28 32.8 42 35.8", k.logo, 2.5);
+  else if (k.mark === "n") g += L("M23 39.8 L25 31.8 L30.5 38.8 L32.5 31.2", k.logo, 2.3);
+  else if (k.mark === "asics") g += L("M18.5 39.3 Q26 32.8 36 35.2 M21.5 40.6 Q30 35.2 40 37.6", k.logo, 1.6);
+  else if (k.mark === "lines") g += L("M17.5 39 Q28 32.4 43 35.6 M17.5 41 Q28 34.6 43 37.8", k.logo, 1.1);
+  g += P("M4.5 47.5 L4.5 42.5 Q5 40.5 8 40.3 L44 41.4 Q56 42 60.6 44.4 Q61 46.6 58 47.5 Z", k.sole);
+  if (k.solex) g += P("M4.5 47.5 L4.5 42.5 Q5 40.5 8 40.3 L16 40.6 L16 47.5 Z", k.solex);
+  g += P("M4.5 47.5 L58 47.5 Q60.5 47.3 60.8 45.6 Q61.6 49.6 57.5 50 L7 50 Q4.5 50 4.5 47.5 Z", k.out);
+  if (k.lug){ let t = ""; for (let x = 6; x <= 55; x += 4.1) t += "M"+x+" 49.6 L"+(x+1.4)+" 52 L"+(x+2.8)+" 49.6 Z "; g += '<path d="'+t+'" fill="'+k.out+'"/>'; }
+  g += L("M25.5 28.4 L28 32.3 M29 29.7 L31.5 33.5 M32.6 30.9 L35 34.7 M36.2 32.2 L38.4 35.7", k.lace, 1.5);
+  g += L("M9 28.5 Q14 30.5 20 30", "rgba(0,0,0,.32)", .9);
+  return '<g transform="translate(0,-4)">'+g+"</g>";
+}
 function svgArt(it){
-  const sh = SH[it.t] || SH.tee; const c = it.col && it.col.length ? it.col : ["#888888"];
+  if (it.kit) return '<svg viewBox="0 0 64 64" aria-hidden="true">'+kitShoe(it.kit)+"</svg>";
+  const sh = SH[it.art] || SH[it.t] || SH.tee; const c = it.col && it.col.length ? it.col : ["#888888"];
   const f1 = c[0], f2 = c[1] || f1; const id = "g" + (++artSeq);
   const ovc = lum(f1) < .42 ? "rgba(255,255,255,.4)" : "rgba(0,0,0,.3)";
   let defs = "", body = "";
@@ -1205,7 +1290,8 @@ function svgArt(it){
       body += '<g fill="url(#'+id+'t)">'+sh.b+'</g>';
     }
     const chest = ["tee","teels","sweater","hoodie","polo","polols","henley","henleyls","jersey","tank"].includes(it.t);
-    if (it.pat === "imprime" && chest) body += '<rect x="25" y="24" width="14" height="11" rx="2" fill="'+(c[1] || ovc)+'"/>';
+    if (it.pat === "imprime" && chest) body += '<rect x="25" y="24" width="14" height="11" rx="2" fill="'+(c[1] || ovc)+'"/>' + (c[2] ? '<path d="M27 32 Q30 27 33 30 Q35 32 37 26" fill="none" stroke="'+c[2]+'" stroke-width="1.6" stroke-linecap="round"/>' : "");
+    if (sh.x) body += sh.x.replace(/F1/g, f1).replace(/F2/g, f2);
     if (it.pat === "logo" && chest) body += '<path d="M35 21 Q38 22 41 19" stroke="'+(c[1] || ovc)+'" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
   }
   const o = sh.o ? '<path d="'+sh.o+'" fill="none" stroke="'+(sh.raw ? "rgba(255,255,255,.45)" : ovc)+'" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>' : "";
@@ -1339,6 +1425,7 @@ function vToday(){
         <div class="row"><span class="sil">${silFig(o.harm.sil)}${esc(SIL[o.harm.sil].n)}</span>${L ? `<button class="sil" data-act="open" data-id="${L.a}">Layering · ${esc(L.n)}</button>` : perf ? `<button class="sil" data-act="open" data-id="${perf.id}">${esc(perf.n)}</button>` : ""}</div>
         ${o.harm.good.length ? `<ul class="why">${o.harm.good.slice(0,3).map(x => `<li>${esc(x)}</li>`).join("")}${o.harm.warn.slice(0,1).map(x => `<li class="w">${esc(x)}</li>`).join("")}</ul>` : ""}
         <div class="row">${worn ? `<span class="note" style="flex:1">Tenue notée pour aujourd’hui.</span>` : `<button class="btn pri wide" data-act="wearToday">Je porte ça</button>`}<button class="btn" data-act="otherToday">${ICO.dice}<span>Autre</span></button><button class="btn ghost" data-act="toComposer">Ajuster</button></div>
+        <button class="nope" data-act="nopeOpen" data-k="today">Pas ton style ? Dis-moi ce qui coince</button>
       </div>
     </div>
     <div class="panel">
@@ -1385,7 +1472,7 @@ function vDressing(){
       <select class="sel" id="sort" aria-label="Trier"><option value="cat"${ui.sort === "cat" ? " selected" : ""}>Catégorie</option><option value="accords"${ui.sort === "accords" ? " selected" : ""}>Plus d’accords</option><option value="couleur"${ui.sort === "couleur" ? " selected" : ""}>Clair à foncé</option><option value="porte"${ui.sort === "porte" ? " selected" : ""}>Portées récemment</option></select></div>
     <div class="chips"><button class="chip" data-act="cat" data-k="all" aria-pressed="${ui.cat === "all"}">Tout <span class="mono">${total}</span></button>${CAT_ORDER.filter(c => counts[c]).map(c => `<button class="chip" data-act="cat" data-k="${c}" aria-pressed="${ui.cat === c}">${CAT_LBL[c]} <span class="mono">${counts[c]}</span></button>`).join("")}</div>
     <div class="swrow"><button class="chip" data-act="famf" data-k="" aria-pressed="${!ui.fam}">Toutes couleurs</button>${famsOwned.map(f => `<button class="sw1" data-act="famf" data-k="${f}" aria-pressed="${ui.fam === f}" style="background:${FAM[f].h}" title="${FAM[f].n}" aria-label="${FAM[f].n}"></button>`).join("")}</div>
-    <div class="row"><button class="chip" data-act="misc" aria-pressed="${ui.showMisc}">Afficher sport et vendus</button></div>
+    <div class="row"><button class="chip" data-act="misc" aria-pressed="${ui.showMisc}">Afficher les pièces de sport</button></div>
     ${routine}
     ${list.length ? `<div class="grid">${list.map(tile).join("")}</div>` : `<div class="empty">Aucune pièce ne correspond. Essaie un autre mot, une autre couleur ou une autre catégorie.</div>`}
   </section>`;
@@ -1426,6 +1513,7 @@ function vComposer(){
       ${L ? `<div class="sec" style="margin-top:0"><span class="h3">Parfum · layering</span>${layerCard(L)}</div>` : perf ? `<div class="sec" style="margin-top:0"><span class="h3">Parfum</span><button class="mini" data-act="open" data-id="${perf.id}">${pic(perf)}<span class="t"><b>${esc(perf.n)} · ${esc(perf.b)}</b><span>${esc(perfumeWhy(perf, o.cfg))}</span></span></button></div>` : ""}
       <div class="sec" style="margin-top:0"><span class="h3">Grooming</span><ul class="tips">${o.tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>
       <div class="row"><button class="btn pri wide" data-act="wear">Je porte ça aujourd’hui</button><button class="btn" data-act="savelook">Sauver</button></div>
+      <button class="nope" data-act="nopeOpen" data-k="composer">Pas ton style ? Dis-moi ce qui coince</button>
     </aside></div></section>`;
 }
 
@@ -1507,13 +1595,13 @@ function vRotation(){
     const dl = clothes.map(i => ({i, d:daysSince(i.id)})).filter(x => x.d === null || x.d > 30).sort((a,b) => (b.d === null ? 999 : b.d) - (a.d === null ? 999 : a.d)).slice(0,10);
     dormant = dl.length ? `<div class="list">${dl.map(x => `<button class="lrow" data-act="open" data-id="${x.i.id}">${pic(x.i)}<span class="t"><b>${esc(dn(x.i))}</b><span>${x.d === null ? "Jamais portée depuis le début du suivi" : "Pas portée depuis "+x.d+" jours"}</span></span></button>`).join("")}</div>` : `<div class="empty">Tout tourne bien, aucune pièce oubliée.</div>`;
   } else dormant = `<div class="note">${days.length} jour${days.length > 1 ? "s" : ""} noté${days.length > 1 ? "s" : ""} sur 7. Note tes tenues avec « Je porte ça » et l’analyse se débloque.</div>`;
-  const toSell = owned().filter(i => i.v === "vendre" && !isSold(i));
+  const toSell = owned().filter(i => i.v === "vendre" && !isSold(i) && i.cat !== "soin");
   const watch = owned().filter(i => i.v === "surveiller" && !isSold(i));
   const sold = owned().filter(isSold);
   const row = (i, btn) => `<div class="lrow">${pic(i)}<button class="t" data-act="open" data-id="${i.id}"><b>${esc(dn(i))}</b><span>${esc(i.b)}${i.note ? " · "+esc(i.note) : ""}</span></button>${btn}</div>`;
   return `<div class="two"><div class="panel"><span class="h3">Les plus portées</span>${most.length ? `<div class="list">${most.map(x => `<button class="lrow" data-act="open" data-id="${x.i.id}">${pic(x.i)}<span class="t"><b>${esc(dn(x.i))}</b><span>${x.n} fois</span></span></button>`).join("")}</div>` : `<div class="note">Rien de noté pour l’instant.</div>`}</div>
   <div class="panel"><span class="h3">Pièces dormantes</span>${dormant}</div></div>
-  <div class="two"><div class="panel"><div class="between"><span class="h3">À vendre sur Vinted</span><span class="eyebrow">${toSell.length}</span></div>${toSell.length ? `<div class="list">${toSell.map(i => row(i, `<button class="btn sm" data-act="sold" data-id="${i.id}">Vendu</button>`)).join("")}</div>` : `<div class="note">Tout est parti. Bien joué.</div>`}</div>
+  <div class="two"><div class="panel"><div class="between"><span class="h3">En pause</span><span class="eyebrow">${toSell.length}</span></div>${toSell.length ? `<div class="list">${toSell.map(i => row(i, `<button class="btn sm" data-act="vset" data-k="garder" data-id="${i.id}">Remettre en jeu</button>`)).join("")}</div>` : `<div class="note">Rien en pause, tout tourne.</div>`}</div>
   <div class="panel"><div class="between"><span class="h3">À surveiller</span><span class="eyebrow">${watch.length}</span></div>${watch.length ? `<div class="list">${watch.map(i => row(i, `<button class="btn sm ghost" data-act="sold" data-id="${i.id}">Vendu</button>`)).join("")}</div>` : `<div class="note">Rien à surveiller.</div>`}</div></div>
   ${sold.length ? `<div class="panel"><div class="between"><span class="h3">Vendues</span><span class="eyebrow">${sold.length}</span></div><div class="list">${sold.map(i => row(i, `<button class="btn sm ghost" data-act="unsold" data-id="${i.id}">Annuler</button>`)).join("")}</div></div>` : ""}`;
 }
@@ -1548,6 +1636,7 @@ function vSettings(){
     <p class="lead" style="margin:0">Trois façons. Le bouton Ajouter du Dressing, avec une photo qui détecte la couleur. Ou tu décris la pièce à Claude, qui te renvoie un code à coller dans « Restaurer ou importer ». Ou Claude met l’appli à jour directement.</p></div>
   <div class="panel"><span class="h3">Météo</span><div class="seg" style="max-width:340px"><button data-act="wxmode" data-k="auto" aria-pressed="${ui.wxMode === "auto"}">Automatique</button><button data-act="wxmode" data-k="manuel" aria-pressed="${ui.wxMode !== "auto"}">À la main</button></div>
     <p class="lead" style="margin:0">En automatique, l’appli utilise ta position, ou Paris par défaut, pour choisir la météo et repérer la pluie. Dans Claude, la météo en ligne n’est pas accessible : règle-la à la main.</p></div>
+  <div class="panel"><span class="h3">Ce que l’appli a appris</span><p class="lead" style="margin:0">${Object.keys(U.nope).length} associations écartées, ${Object.keys(U.yes).length} validées en les portant. Chaque « Pas ton style » et chaque « Je porte ça » affine les propositions.</p>${Object.keys(U.nope).length + Object.keys(U.yes).length ? `<div><button class="btn ghost" data-act="forgetTaste">Oublier ce que j’ai appris</button></div>` : ""}</div>
   <div class="panel"><span class="h3">Remettre à zéro</span>${ui.confirmReset ? `<div class="confirm">Effacer le suivi, les tenues, les ajouts et les photos ? <button class="btn sm" data-act="reset">Tout effacer</button><button class="btn sm ghost" data-act="noreset">Annuler</button></div>` : `<div><button class="btn ghost" data-act="askreset">Effacer mes données</button></div>`}</div>`;
 }
 
@@ -1562,7 +1651,7 @@ function closeSheet(){ stack.length = 0; draft = null; ui.confirmDel = null; $("
 function renderSheet(){
   const top = stack[stack.length-1]; if (!top) return;
   const head = `<div class="grab"></div><div class="shd">${stack.length > 1 ? `<button class="icb" data-act="back" aria-label="Retour">${ICO.back}</button>` : ""}<span class="spacer"></span><button class="icb" data-act="close" aria-label="Fermer">${ICO.x}</button></div>`;
-  const body = top.kind === "form" ? sForm() : top.kind === "import" ? sImport() : sItem(byId(top.id));
+  const body = top.kind === "form" ? sForm() : top.kind === "import" ? sImport() : top.kind === "nope" ? sNope() : sItem(byId(top.id));
   $("#sheet").innerHTML = head + body;
 }
 function mt(e){ const t = e.r.tags.find(x => x.g) || e.r.tags[0]; return `<button class="mt" data-act="push" data-id="${e.it.id}">${pic(e.it)}${scorePill(e.r.s)}<b>${esc(dn(e.it))}</b><span class="rs">${esc(t ? t.x : "")}</span></button>`; }
@@ -1592,10 +1681,11 @@ function sItem(x){
   if (x.wish && !U.bought[x.id]) acts.push(`<button class="btn pri sm" data-act="buy" data-id="${x.id}">Je l’ai acheté</button>`);
   if (!x.wish && x.cat !== "soin") acts.push(`<button class="btn sm" data-act="edit" data-id="${x.id}">${ICO.edit}<span>Modifier</span></button>`);
   if (!x.wish && x.cat !== "soin") acts.push(isSold(x) ? `<button class="btn sm ghost" data-act="unsold" data-id="${x.id}">Remettre dans le dressing</button>` : `<button class="btn sm ghost" data-act="sold" data-id="${x.id}">Marquer vendu</button>`);
+  if (!x.wish && x.cat !== "soin" && !isSold(x)) acts.push(x.v === "vendre" ? `<button class="btn sm ghost" data-act="vset" data-k="garder" data-id="${x.id}">Remettre en jeu</button>` : `<button class="btn sm ghost" data-act="vset" data-k="vendre" data-id="${x.id}">Mettre en pause</button>`);
   if (x.custom) acts.push(ui.confirmDel === x.id ? `<span class="confirm">Supprimer définitivement ? <button class="btn sm" data-act="delcustom" data-id="${x.id}">Supprimer</button><button class="btn sm ghost" data-act="nodelc">Annuler</button></span>` : `<button class="btn sm ghost" data-act="askdel" data-id="${x.id}">Supprimer</button>`);
   if (acts.length) html += `<div class="row" style="margin-top:14px">${acts.join("")}</div>`;
   if (x.cat === "parfum"){
-    if (x.v === "vendre") return html + `<div class="sec"><span class="h3">Verdict</span><div class="note">Sors-le de ta rotation et mets-le en vente. Un flacon entamé d’extrait se revend correctement.</div></div>`;
+    if (x.v === "vendre") return html + `<div class="sec"><span class="h3">Verdict</span><div class="note">En pause : tu ne le supportes plus en ce moment, donc l’appli ne te le propose plus. Remets-le en jeu le jour où il te revient.</div></div>`;
     const vibes = x.u.map(u => UNIV_LBL[u]).join(", ");
     html += `<div class="sec"><span class="h3">Quand le porter</span><div class="note">${esc((x.s.length === 3 ? "Toute l’année" : x.s.map(s => SEASON_LBL[s]).join(" et "))+", "+((x.m||[]).length === 2 ? "jour comme soir" : (x.m||[])[0] === "soir" ? "plutôt le soir" : "plutôt en journée")+(vibes ? ". Avec une tenue "+vibes.toLowerCase()+"." : "."))}${x.sill >= 3 ? " Sillage fort, dose léger au bureau." : ""}</div></div>`;
     const lays = LAYERS.filter(L => L.a === x.id || L.b === x.id);
@@ -1677,6 +1767,15 @@ function sForm(){
   <button class="btn pri" type="submit">${d.id ? "Enregistrer" : "Ajouter la pièce"}</button>
   ${d.id && d.base && U.edits[d.id] ? `<button class="btn ghost" type="button" data-act="resetEdit" data-id="${d.id}">Revenir à la fiche d’origine</button>` : ""}
   </form>`;
+}
+function nopeOutfit(){ return ui.nopeSrc === "today" ? TODAY : OUT; }
+function sNope(){
+  const o = nopeOutfit(); if (!o) return '<div class="empty">Plus de tenue à juger.</div>';
+  const ps = piecesOf(o); const sel = ui.nopeSel || [];
+  return `<div style="display:grid;gap:4px;margin-bottom:12px"><span class="eyebrow">Ton goût</span><h2 class="h2" style="font-size:24px">Qu’est-ce qui coince ?</h2></div>
+  <p class="lead" style="margin:0 0 12px">Touche la ou les pièces qui ne vont pas ensemble. L’appli retient ces duos et ne te les reproposera plus. Sans sélection, c’est l’ensemble qu’elle évite.</p>
+  <div class="opts" style="flex-wrap:wrap">${ps.map(it => `<button class="chip" data-act="nopeTog" data-id="${it.id}" aria-pressed="${sel.includes(it.id)}">${esc(dn(it))}</button>`).join("")}</div>
+  <div class="row" style="margin-top:16px"><button class="btn pri wide" data-act="nopeSave">${sel.length ? "Éviter ces associations" : "Éviter cette tenue"}</button></div>`;
 }
 function sImport(){
   return `<div style="display:grid;gap:4px;margin-bottom:12px"><span class="eyebrow">Sauvegarde</span><h2 class="h2" style="font-size:24px">Restaurer ou importer</h2></div>
@@ -1830,7 +1929,7 @@ async function act(a, el){
     case "tvibe": ui.vibe = k; saveUI(); TODAY = null; OUT = null; render(); break;
     case "tmoment": ui.moment = ui.moment === "soir" ? "jour" : "soir"; saveUI(); TODAY = null; OUT = null; render(); break;
     case "otherToday": TODAY = bestOf(curCfg({palette:null}), null, 6); render(); break;
-    case "wearToday": logWear(outfitIds(TODAY)); toast("Noté pour aujourd’hui"); render(); break;
+    case "wearToday": recordPairs(U.yes, Object.values(TODAY.pieces)); logWear(outfitIds(TODAY)); toast("Noté pour aujourd’hui"); render(); break;
     case "toComposer": OUT = JSON.parse(JSON.stringify(TODAY)); OUT.cfg.locked = {}; finishOutfit(OUT); ui.tab = "composer"; saveUI(); render(); window.scrollTo(0,0); break;
     case "weekVibe": { const order = Object.keys(VIBES); const cur = ui.weekVibes[+k]; ui.weekVibes[+k] = order[(order.indexOf(cur)+1) % order.length]; saveUI(); render(); break; }
     case "planWeek": U.week = buildWeek(ui.weekVibes.slice(), ui.weather, ui.wxMode === "auto" && !!WX.rain); persist(); render(); toast("Semaine planifiée"); break;
@@ -1845,12 +1944,13 @@ async function act(a, el){
       OUT = buildOutfit(curCfg({vibe, weather, locked:{[s]:it.id}, palette:null}));
       closeSheet(); render(); window.scrollTo(0,0); break;
     }
-    case "wear": logWear(outfitIds(OUT)); toast("Noté pour aujourd’hui"); break;
+    case "wear": recordPairs(U.yes, Object.values(OUT.pieces)); logWear(outfitIds(OUT)); toast("Noté pour aujourd’hui"); break;
     case "wearone": logWear([id]); toast("Noté pour aujourd’hui"); if (stack.length) renderSheet(); break;
     case "savelook": {
       const items = SLOT_ORDER.filter(s => OUT.pieces[s]).map(s => OUT.pieces[s]);
       U.looks.push({id:"l"+Date.now(), date:today(), vibe:OUT.cfg.vibe, weather:OUT.cfg.weather, moment:OUT.cfg.moment, items, pieces:Object.assign({}, OUT.pieces), acc:OUT.acc||[], perfume:OUT.perfume||null, layer:OUT.layer||null, h:OUT.harm.h});
       if (U.looks.length > 200) U.looks.shift();
+      recordPairs(U.yes, items);
       persist(); toast("Tenue ajoutée au lookbook"); break;
     }
     case "reopen": {
@@ -1890,6 +1990,18 @@ async function act(a, el){
     case "importText": { const r = importData(($("#imp")||{}).value || ""); if (typeof r === "string"){ $("#imp-err").textContent = r; } else { closeSheet(); render(); toast(r.msg); } break; }
     case "importFile": $("#filein").click(); break;
     case "askreset": ui.confirmReset = true; render(); break;
+    case "nopeOpen": ui.nopeSrc = k; ui.nopeSel = []; openSheet("nope", null, false); break;
+    case "nopeTog": { const a = ui.nopeSel || (ui.nopeSel = []); const ix = a.indexOf(id); if (ix >= 0) a.splice(ix,1); else a.push(id); renderSheet(); break; }
+    case "nopeSave": {
+      const o = nopeOutfit(); if (!o){ closeSheet(); break; }
+      recordPairs(U.nope, Object.values(o.pieces), new Set(ui.nopeSel || []));
+      persist(); closeSheet();
+      if (ui.nopeSrc === "today") TODAY = bestOf(curCfg({palette:null}), null, 6);
+      else OUT = buildOutfit(curCfg({locked:{}}), {avoid:Object.fromEntries(Object.entries(o.pieces).map(([s,v]) => [s,[v]]))});
+      render(); toast("Noté, je ne te la ressortirai plus"); break;
+    }
+    case "vset": U.vset[id] = k; invalidate(); persist(); OUT = null; TODAY = null; render(); if (stack.length) renderSheet(); toast(k === "vendre" ? "Mis en pause" : "Remis en jeu"); break;
+    case "forgetTaste": U.nope = {}; U.yes = {}; persist(); render(); toast("Goûts oubliés"); break;
     case "noreset": ui.confirmReset = false; render(); break;
     case "reset": U = normU(null); ui.confirmReset = false; invalidate(); persist(); OUT = null; TODAY = null; render(); toast("Données effacées"); break;
   }
